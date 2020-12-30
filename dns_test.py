@@ -46,7 +46,7 @@ def read_list(list):
     notval = 0
     err = 0
     for line in file:
-        time.sleep(0.1)
+        time.sleep(0.01)
         url = line.replace('\n', '')
         # print('start', url, 'end')
         try:
