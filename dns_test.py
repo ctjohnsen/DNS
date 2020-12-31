@@ -80,19 +80,26 @@ def validate_dnssec(domain: str) -> dict:
     ns_address = response.rrset[0].to_text()
 
     # Print SOA
+
     answer = dns.resolver.resolve(domain, 'SOA', raise_on_no_answer=False)
     soa = answer.rrset
     write_file('soa.txt', soa)
 
+
+
     # get DNSKEY for zone
+    print('right arter soa')
     request = dns.message.make_query(domain, dns.rdatatype.DNSKEY, want_dnssec=True)
     # send the query to the master NS
-    response = dns.query.udp(request, ns_address)
+    print('2')
+    response = dns.query.udp(request, ns_address, timeout=5)
+    print('3')
+
+
 
     if response.rcode() != 0:
         result.update(message="ERROR: no DNSKEY record found or SERVEFAIL", code=STATE_WARNING)
         return result
-
     # find an RRSET for the DNSKEY record
     answer = response.answer
     if len(answer) != 2:
