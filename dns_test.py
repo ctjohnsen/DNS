@@ -93,7 +93,6 @@ def validate_dnssec(domain: str) -> dict:
 
 
     # get DNSKEY for zone
-    print('right arter soa')
     request = dns.message.make_query(domain, dns.rdatatype.DNSKEY, want_dnssec=True)
     # send the query to the master NS
     response = dns.query.udp(request, ns_address, timeout=5)
