@@ -48,19 +48,28 @@ def read_list(list):
     for line in file:
         time.sleep(0.01)
         url = line.replace('\n', '')
-        # print('start', url, 'end')
-        try:
-            validation = validate_dnssec(url)
-            if validation['code'] == 0:
-                val += 1
-            else:
-                notval += 1
-            # print(validate_dnssec(url))
-            # print(validation['code'], validation['message'])
-        except:
-            write_file('error.txt', url)
-            err += 1
-            continue
+        print(url)
+        count = 1
+        while count <= 3:
+            try:
+                validation = validate_dnssec(url)
+                if validation['code'] == 0:
+                    val += 1
+                    print('val')
+                else:
+                    notval += 1
+                    print('no val')
+                # print(validate_dnssec(url))
+                # print(validation['code'], validation['message'])
+                break
+            except:
+                if count == 3:
+                    write_file('error.txt', url)
+                    err += 1
+                    print('error')
+                count += 1
+                print('count')
+                continue
     file.close()
     print('Domains that had an error:', err)
     print('Domains that had valid DNSKEY:', val)
@@ -91,9 +100,7 @@ def validate_dnssec(domain: str) -> dict:
     print('right arter soa')
     request = dns.message.make_query(domain, dns.rdatatype.DNSKEY, want_dnssec=True)
     # send the query to the master NS
-    print('2')
     response = dns.query.udp(request, ns_address, timeout=5)
-    print('3')
 
 
 
