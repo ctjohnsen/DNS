@@ -55,10 +55,8 @@ def read_list(list):
                 validation = validate_dnssec(url)
                 if validation['code'] == 0:
                     val += 1
-                    print('val')
                 else:
                     notval += 1
-                    print('no val')
                 # print(validate_dnssec(url))
                 # print(validation['code'], validation['message'])
                 break
@@ -66,9 +64,7 @@ def read_list(list):
                 if count == 3:
                     write_file('error.txt', url)
                     err += 1
-                    print('error')
                 count += 1
-                print('count')
                 continue
     file.close()
     print('Domains that had an error:', err)
