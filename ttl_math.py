@@ -1,6 +1,9 @@
 #!/usr/bin/python
 from _datetime import datetime
 import argparse
+from collections import Counter
+from collections import OrderedDict
+
 
 DESCRIPTION = """
 Find how long the update time for DNSKEY or domains are.
@@ -12,6 +15,7 @@ def arg_parse() -> argparse:
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument('--soa', help="Doamin time, give soa.txt file from dns_test.py", type=soa_ttl)
     parser.add_argument('--dns', help="DNSKEY ttl, give DNSKEY_ttl.txt file from dns_test.py", type=dnskey_ttl)
+    parser.add_argument('--unique', help="DNSKEY uniqueness, give DNSKEY.txt file from dns_test.py", type=same_dnskey)
     args = parser.parse_args()
 
     return args
@@ -88,6 +92,52 @@ def soa_ttl(path):
     print('TTL from 12 to 24 hours:', over_24)
     print('TTL from 24 to 48 hours:', over_48)
     print('TTL from 48 hours:', more_48)
+
+
+def same_dnskey(path):
+    all_domains = []
+    temp_dnsky =[]
+    domains = []
+    url_add = []
+    file = open(path, 'r')
+    print(file.name)
+
+    for line in file:
+        new_line = line.lower()
+        all_domains.append(new_line)
+
+    unique_domains = OrderedDict.fromkeys(all_domains)  # Sort if some Lines are duplicats
+
+
+    for line in unique_domains:
+        line = line.split(' ')
+        sep = ' '
+        dnskey = line[7:]
+        dns_line = sep.join(dnskey)
+        temp_dnsky.append(dns_line)
+
+    temp_dup = [k for (k,v) in Counter(temp_dnsky).items() if v > 1]  # Sort out all DNSKEY that are not duplicats
+    print(*temp_dup, sep = '\n')
+    print('DNSKEY shared:', len(temp_dup))
+
+    for line in all_domains:
+        line = line.split(' ')
+        sep = ' '
+        dnskey = line[7:]
+        dns_line = sep.join(dnskey)
+
+        if dns_line in temp_dup:
+            domains.append(line)
+
+    for line in domains:
+        url = line[0]
+        url_add.append(url)
+
+
+    url_add = sorted(set(url_add))
+    print('Number of domains using same DNSKEY as others:', len(url_add))
+
+
 
 if __name__ == "__main__":
     parse_args = arg_parse()
