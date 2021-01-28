@@ -1,0 +1,23 @@
+# 1st run
+Domains that had an error: 13592
+Domains that had valid DNSKEY: 30757
+Domains missing DNSKEY: 22766
+
+# 2nd run
+Domains that had an error: 10913
+Domains that had valid DNSKEY: 2481
+Domains missing DNSKEY: 198
+
+# 3rd run
+Domains that had an error: 10279
+Domains that had valid DNSKEY: 610
+Domains missing DNSKEY: 24
+
+# 4rd run
+Domains that had an error: 10132
+Domains that had valid DNSKEY: 144
+Domains missing DNSKEY: 3
+
+# All
+Domains that had valid DNSKET: 33992
+Domains missing DNSKEY: 22991
