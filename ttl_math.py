@@ -16,6 +16,7 @@ def arg_parse() -> argparse:
     parser.add_argument('--soa', help="Doamin time, give soa.txt file from dns_test.py", type=soa_ttl)
     parser.add_argument('--dns', help="DNSKEY ttl, give DNSKEY_ttl.txt file from dns_test.py", type=dnskey_ttl)
     parser.add_argument('--unique', help="DNSKEY uniqueness, give DNSKEY.txt file from dns_test.py", type=same_dnskey)
+    parser.add_argument('--al', help="DNSKEY algorithm, give DNSKEY.txt file from dns_test.py", type=algorithm)
     args = parser.parse_args()
 
     return args
@@ -32,24 +33,34 @@ def dnskey_ttl(path):
         # print(line)
     file.close()
     my_list = sorted(set(my_list))
-    zero_thirty = 0
+    zero_seven = 0
+    seven_fourteen = 0
+    fourteen_thirty = 0
     thirty_sixty = 0
     sixty_ = 0
     for r in range(1, len(my_list)):
         made = datetime.strptime(my_list[r][1][0:8], '%Y%m%d')
         expire = datetime.strptime(my_list[r][2][0:8], '%Y%m%d')
         valid_ttl = made - expire
-        if valid_ttl.days <= 30:
+        if valid_ttl.days <= 7:
             # print('0 - 30 days', valid_ttl)
-            zero_thirty += 1
+            zero_seven += 1
+        elif valid_ttl.days > 7 and valid_ttl.days <= 14:
+            # print('0 - 30 days', valid_ttl)
+            seven_fourteen += 1
+        elif valid_ttl.days > 14 and valid_ttl.days <= 30:
+            # print('0 - 30 days', valid_ttl)
+            fourteen_thirty += 1
         elif valid_ttl.days > 30 and valid_ttl.days <= 60:
             thirty_sixty += 1
             # print('30 - 60 days', valid_ttl)
-        elif valid_ttl.days > 100:
+        elif valid_ttl.days >= 61:
             sixty_ += 1
             # print('61 - days')
         # print(valid_ttl.days)
-    print('Keys from 0 - 30 days:', zero_thirty)
+    print('Keys from 0 - 7 days:', zero_seven)
+    print('Keys from 8 - 14 days:', seven_fourteen)
+    print('Keys from 15 - 30 days:', fourteen_thirty)
     print('Keys from 31 - 60 days:', thirty_sixty)
     print('Keys from 61 < days:', sixty_)
     # print(my_list)
@@ -103,11 +114,12 @@ def same_dnskey(path):
     print(file.name)
 
     for line in file:
-        new_line = line.lower()
+        line = line.split(' ')
+        sep = ' '
+        line[0] = line[0].lower()
+        new_line = sep.join(line)
         all_domains.append(new_line)
-
     unique_domains = OrderedDict.fromkeys(all_domains)  # Sort if some Lines are duplicats
-
 
     for line in unique_domains:
         line = line.split(' ')
@@ -117,7 +129,7 @@ def same_dnskey(path):
         temp_dnsky.append(dns_line)
 
     temp_dup = [k for (k,v) in Counter(temp_dnsky).items() if v > 1]  # Sort out all DNSKEY that are not duplicats
-    print(*temp_dup, sep = '\n')
+    print(*temp_dup, sep=' ')
     print('DNSKEY shared:', len(temp_dup))
 
     for line in all_domains:
@@ -131,13 +143,39 @@ def same_dnskey(path):
 
     for line in domains:
         url = line[0]
-        url_add.append(url)
+        if url not in url_add:
+            url_add.append(url)
 
 
+
+    # print(url_add)
     url_add = sorted(set(url_add))
+    # print(*url_add, sep=' ')
     print('Number of domains using same DNSKEY as others:', len(url_add))
 
+def algorithm(path):
+    file = open(path, 'r')
+    print(file.name)
+    my_list = []
+    alfori = []
+    for line in file:
+        test = line.split(' ')
+        test[0] = test[0].lower()
+        domain_al = test[0], test[6]
+        my_list.append(domain_al)
+    file.close()
+    my_list = sorted(set(my_list))
+    # print(my_list)
+    for x in my_list:
+        algor = x[1]
+        # print(algor)
+        alfori.append(algor)
+    count = Counter(alfori)
 
+    for k,v in sorted(count.items(), key=lambda coun: coun[1], reverse=True):
+        print('Algorithm used:', k + ',', 'Numbers of domain uses:', v)
+
+    # print(*count.items(), sep='\n')
 
 if __name__ == "__main__":
     parse_args = arg_parse()
