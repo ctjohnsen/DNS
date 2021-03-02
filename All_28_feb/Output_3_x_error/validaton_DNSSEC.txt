@@ -1,0 +1,3 @@
+Domains that had an error: 12642
+Domains that had valid DNSKEY: 31610
+Domains missing DNSKEY: 22867
