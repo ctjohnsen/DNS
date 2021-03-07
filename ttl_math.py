@@ -3,6 +3,8 @@ from _datetime import datetime
 import argparse
 from collections import Counter
 from collections import OrderedDict
+import whois
+import time
 
 
 DESCRIPTION = """
@@ -17,6 +19,7 @@ def arg_parse() -> argparse:
     parser.add_argument('--dns', help="DNSKEY ttl, give DNSKEY_ttl.txt file from dns_test.py", type=dnskey_ttl)
     parser.add_argument('--unique', help="DNSKEY uniqueness, give DNSKEY.txt file from dns_test.py", type=same_dnskey)
     parser.add_argument('--al', help="DNSKEY algorithm, give DNSKEY.txt file from dns_test.py", type=algorithm)
+    parser.add_argument('--alc', help="DNSKEY algorithm numbers of same registrar, give DNSKEY.txt file from dns_test.py", type=algo_reg)
     args = parser.parse_args()
 
     return args
@@ -176,6 +179,47 @@ def algorithm(path):
         print('Algorithm used:', k + ',', 'Numbers of domain uses:', v)
 
     # print(*count.items(), sep='\n')
+
+
+def algo_reg(path):
+    file = open(path, 'r')
+    print(file.name)
+    my_list = []
+    alfori = []
+    for line in file:
+        test = line.split(' ')
+        test[0] = test[0].lower()
+        domain_al = test[0], test[6]
+        my_list.append(domain_al)
+    file.close()
+    my_list = sorted(set(my_list))
+    # print(my_list)
+    for x in my_list:
+        if x[1] == '7' or x[1] == '5' or x[1] == '10':
+            algor = x[0]
+            # print(algor)
+            alfori.append(algor)
+
+    reg_id = []
+    counter = 0
+    for y in alfori:
+        y = y[:-1]
+        counter += 1
+        time.sleep(1.1)
+        whoisdata = whois.whois(y)
+        who = whoisdata.text
+        who1 = who.split('\n')
+        reg = who1[25]
+        # print(reg)
+        reg1 = reg.split(' ')
+        reg2 = reg1[2]
+        reg_id.append(reg2)
+        print(counter)
+    count = Counter(reg_id)
+
+    for k, v in sorted(count.items(), key=lambda coun: coun[1], reverse=True):
+        print('Registrar name:', k + ',', 'Numbers of registrar uses:', v)
+
 
 if __name__ == "__main__":
     parse_args = arg_parse()
