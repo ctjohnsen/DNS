@@ -1,0 +1,17 @@
+Registrar name: REG31-NORID, Numbers of registrar uses: 1250
+Registrar name: REG814-NORID, Numbers of registrar uses: 209
+Registrar name: REG1068-NORID, Numbers of registrar uses: 23
+Registrar name: Name............:, Numbers of registrar uses: 17
+Registrar name: REG42-NORID, Numbers of registrar uses: 11
+Registrar name: REG0-NORID, Numbers of registrar uses: 10
+Registrar name: REG333-NORID, Numbers of registrar uses: 4
+Registrar name: REG1012-NORID, Numbers of registrar uses: 1
+Registrar name: REG812-NORID, Numbers of registrar uses: 1
+Registrar name: REG990-NORID, Numbers of registrar uses: 1
+Registrar name: REG626-NORID, Numbers of registrar uses: 1
+Registrar name: REG797-NORID, Numbers of registrar uses: 1
+Registrar name: REG1071-NORID, Numbers of registrar uses: 1
+Registrar name: REG334-NORID, Numbers of registrar uses: 1
+Registrar name: REG370-NORID, Numbers of registrar uses: 1
+Registrar name: REG877-NORID, Numbers of registrar uses: 1
+
