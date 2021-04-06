@@ -1,6 +1,6 @@
-Registrar name: REG31-NORID, Numbers of registrar uses: 1262
-Registrar name: REG814-NORID, Numbers of registrar uses: 206
-Registrar name: REG1068-NORID, Numbers of registrar uses: 19
+Registrar name: REG31-NORID, Numbers of registrar uses: 1262			SYSE AS
+Registrar name: REG814-NORID, Numbers of registrar uses: 206			GLOBALCONNECT AS
+Registrar name: REG1068-NORID, Numbers of registrar uses: 19			Altidata AS
 Registrar name: Name............:, Numbers of registrar uses: 17
 Registrar name: REG42-NORID, Numbers of registrar uses: 7
 Registrar name: REG333-NORID, Numbers of registrar uses: 4

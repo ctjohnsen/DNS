@@ -164,8 +164,11 @@ def algorithm(path):
     for line in file:
         test = line.split(' ')
         test[0] = test[0].lower()
-        domain_al = test[0], test[6]
-        my_list.append(domain_al)
+        if (any(test[0] in i for i in my_list)):
+            pass
+        else:
+            domain_al = test[0], test[6]
+            my_list.append(domain_al)
     file.close()
     my_list = sorted(set(my_list))
     # print(my_list)
