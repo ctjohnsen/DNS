@@ -119,7 +119,7 @@ def validate_dnssec(domain: str) -> dict:
     else:
         result.update(message="OK: there is a valid dnssec self-signed key for the domain", code=STATE_OK)
         write_file('DNSKEY.txt', response.answer[0])
-        write_file('DNSKEY_ttl.txt', response.answer[1])
+        write_file('DNSKEY_RR.txt', response.answer[1])
         return result
 
 

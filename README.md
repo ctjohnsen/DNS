@@ -1,7 +1,14 @@
 # DNS
 
-dns_test.py is used to find DNS information.
+DNSSEC_verification.py is used to find DNS information.
 
-ttl_math.py is used to retrieve information from the data set retrieved with dns_test.py.
+DNSKEY_analysis.py is used to retrieve information from the data set retrieved with DNSSEC_verification.py.
+
+clean_json.txt are the comands used to get the domains from the JSON file
+
+All the data set is colected from https://data.brreg.no/enhetsregisteret/oppslag/enheter.
+The JSON files is not stored on Github because of the size of 1.1GB
 
 All_30_des is the data set from 30.12.2020
+
+All_28_feb is the data set from 28.02.2021

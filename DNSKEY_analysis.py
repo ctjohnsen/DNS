@@ -16,7 +16,7 @@ def arg_parse() -> argparse:
 
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument('--soa', help="Doamin time, give soa.txt file from dns_test.py", type=soa_ttl)
-    parser.add_argument('--dns', help="DNSKEY ttl, give DNSKEY_ttl.txt file from dns_test.py", type=dnskey_ttl)
+    parser.add_argument('--dns', help="DNSKEY Signature Validity Period, give DNSKEY_RR.txt file from dns_test.py", type=dnskey_svp)
     parser.add_argument('--unique', help="DNSKEY uniqueness, give DNSKEY.txt file from dns_test.py", type=same_dnskey)
     parser.add_argument('--al', help="DNSKEY algorithm, give DNSKEY.txt file from dns_test.py", type=algorithm)
     parser.add_argument('--alc', help="DNSKEY algorithm numbers of same registrar, give DNSKEY.txt file from dns_test.py", type=algo_reg)
@@ -25,14 +25,14 @@ def arg_parse() -> argparse:
     return args
 
 
-def dnskey_ttl(path):
+def dnskey_svp(path):
     file = open(path, 'r')
     print(file.name)
     my_list = []
     for line in file:
         test = line.split(' ')
-        domain_ttl = test[0], test[8], test[9]
-        my_list.append(domain_ttl)
+        domain_svp = test[0], test[8], test[9]
+        my_list.append(domain_svp)
         # print(line)
     file.close()
     my_list = sorted(set(my_list))
@@ -44,23 +44,23 @@ def dnskey_ttl(path):
     for r in range(1, len(my_list)):
         made = datetime.strptime(my_list[r][1][0:8], '%Y%m%d')
         expire = datetime.strptime(my_list[r][2][0:8], '%Y%m%d')
-        valid_ttl = made - expire
-        if valid_ttl.days <= 7:
-            # print('0 - 30 days', valid_ttl)
+        valid_svp = made - expire
+        if valid_svp.days <= 7:
+            # print('0 - 30 days', valid_svp)
             zero_seven += 1
-        elif valid_ttl.days > 7 and valid_ttl.days <= 14:
-            # print('0 - 30 days', valid_ttl)
+        elif valid_svp.days > 7 and valid_svp.days <= 14:
+            # print('0 - 30 days', valid_svp)
             seven_fourteen += 1
-        elif valid_ttl.days > 14 and valid_ttl.days <= 30:
-            # print('0 - 30 days', valid_ttl)
+        elif valid_svp.days > 14 and valid_svp.days <= 30:
+            # print('0 - 30 days', valid_svp)
             fourteen_thirty += 1
-        elif valid_ttl.days > 30 and valid_ttl.days <= 60:
+        elif valid_svp.days > 30 and valid_svp.days <= 60:
             thirty_sixty += 1
-            # print('30 - 60 days', valid_ttl)
-        elif valid_ttl.days >= 61:
+            # print('30 - 60 days', valid_svp)
+        elif valid_svp.days >= 61:
             sixty_ += 1
             # print('61 - days')
-        # print(valid_ttl.days)
+        # print(valid_svp.days)
     print('Keys from 0 - 7 days:', zero_seven)
     print('Keys from 8 - 14 days:', seven_fourteen)
     print('Keys from 15 - 30 days:', fourteen_thirty)

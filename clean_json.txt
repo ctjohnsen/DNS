@@ -1,0 +1,14 @@
+#Prints the home page from json
+cat 'enheter_sokeresultat.json' | grep hjemmeside | awk '{print $3}' | sed 's/.//;s/.$//' | sed 's/.$//' | tee domains.txt
+
+#Del www
+sed 's/www\.//' domains.txt
+
+#Del all after /
+cat domains.txt | sed 's/\/[\S]*//'
+
+#Find just the .no
+cat domains.txt | grep '\.no$'
+
+#Sort out uniq
+cat domains.txt | sort -uf
