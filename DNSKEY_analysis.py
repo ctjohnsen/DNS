@@ -15,11 +15,12 @@ Find how long the update time for DNSKEY or domains are.
 def arg_parse() -> argparse:
 
     parser = argparse.ArgumentParser(description=DESCRIPTION)
-    parser.add_argument('--soa', help="Doamin time, give soa.txt file from dns_test.py", type=soa_ttl)
-    parser.add_argument('--dns', help="DNSKEY Signature Validity Period, give DNSKEY_RR.txt file from dns_test.py", type=dnskey_svp)
-    parser.add_argument('--unique', help="DNSKEY uniqueness, give DNSKEY.txt file from dns_test.py", type=same_dnskey)
-    parser.add_argument('--al', help="DNSKEY algorithm, give DNSKEY.txt file from dns_test.py", type=algorithm)
-    parser.add_argument('--alc', help="DNSKEY algorithm numbers of same registrar, give DNSKEY.txt file from dns_test.py", type=algo_reg)
+    parser.add_argument('--soa', help="Doamin ttl from SOA, give soa.txt file from DNSSEC_verification.py", type=soa_ttl)
+    parser.add_argument('--ttl', help="Doamin ttl from DNSKEY, give DNSKEY.txt file from DNSSEC_verification.py", type=dnskey_ttl)
+    parser.add_argument('--dns', help="DNSKEY Signature Validity Period, give DNSKEY_RR.txt file from DNSSEC_verification.py", type=dnskey_svp)
+    parser.add_argument('--unique', help="DNSKEY uniqueness, give DNSKEY.txt file from DNSSEC_verification.py", type=same_dnskey)
+    parser.add_argument('--al', help="DNSKEY algorithm, give DNSKEY.txt file from DNSSEC_verification.py", type=algorithm)
+    parser.add_argument('--alc', help="DNSKEY algorithm numbers of same registrar, give DNSKEY.txt file from DNSSEC_verification.py", type=algo_reg)
     args = parser.parse_args()
 
     return args
@@ -77,6 +78,44 @@ def soa_ttl(path):
     for line in file:
         test = line.split(' ')
         domain_ttl = test[10]
+        my_list.append(domain_ttl)
+    file.close()
+    over_one = 0
+    over_4 = 0
+    over_12 = 0
+    over_24 = 0
+    over_48 = 0
+    more_48 = 0
+    for ttl in my_list:
+        # print(ttl[:-1])
+        if int(ttl) <= 3600:
+            over_one += 1
+        elif int(ttl) > 3600 and int(ttl) <= 14400:
+            over_4 += 1
+        elif int(ttl) > 14400 and int(ttl) <= 43200:
+            over_12 += 1
+        elif int(ttl) > 43200 and int(ttl) <= 86400:
+            over_24 += 1
+        elif int(ttl) > 86400 and int(ttl) <= 172800:
+            over_48 += 1
+        elif int(ttl) > 172800:
+            more_48 += 1
+
+    print('TTL less then one hour:', over_one)
+    print('TTL from 1 to 4 hours:', over_4)
+    print('TTL from 4 to 12 hours:', over_12)
+    print('TTL from 12 to 24 hours:', over_24)
+    print('TTL from 24 to 48 hours:', over_48)
+    print('TTL from 48 hours:', more_48)
+
+
+def dnskey_ttl(path):
+    file = open(path, 'r')
+    print(file.name)
+    my_list = []
+    for line in file:
+        test = line.split(' ')
+        domain_ttl = test[1]
         my_list.append(domain_ttl)
     file.close()
     over_one = 0
