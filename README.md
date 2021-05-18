@@ -6,7 +6,7 @@ DNSKEY_analysis.py is used to retrieve information from the data set retrieved w
 
 clean_json.txt are the comands used to get the domains from the JSON file
 
-All the data set is colected from https://data.brreg.no/enhetsregisteret/oppslag/enheter.
+All the data set is collected from https://data.brreg.no/enhetsregisteret/oppslag/enheter.
 The JSON files is compressed and stored on in the data set folders.
 
 All_30_des is the data set from 30.12.2020
